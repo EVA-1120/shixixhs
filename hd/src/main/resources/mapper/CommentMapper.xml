@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.hd.mapper.CommentMapper">
+
+    <select id="findByPostId" resultType="org.example.hd.entity.Comment">
+        SELECT * FROM comment
+        WHERE post_id = #{postId}
+        ORDER BY create_time ASC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (post_id, user_id, content, parent_id, create_time)
+        VALUES (#{postId}, #{userId}, #{content}, #{parentId}, #{createTime})
+    </insert>
+
+    <select id="findById" resultType="org.example.hd.entity.Comment">
+        SELECT * FROM comment WHERE id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM comment WHERE id = #{id}
+    </delete>
+
+    <select id="findChildrenIds" resultType="java.lang.Integer">
+        SELECT id FROM comment WHERE parent_id = #{parentId}
+    </select>
+
+</mapper>

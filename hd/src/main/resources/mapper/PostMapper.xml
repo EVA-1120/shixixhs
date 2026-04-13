@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.hd.mapper.PostMapper">
+    <insert id="insertPost" parameterType="org.example.hd.entity.Post" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO post (user_id, content, media_type, media_url, tags, status, create_time, update_time)
+        VALUES (#{userId}, #{content}, #{mediaType}, #{mediaUrl}, #{tags}, 1, NOW(), NOW())
+    </insert>
+
+    <update id="updatePost" parameterType="org.example.hd.entity.Post">
+        UPDATE post SET content=#{content}, media_type=#{mediaType}, media_url=#{mediaUrl}, tags=#{tags}, update_time=NOW()
+        WHERE id=#{id} AND user_id=#{userId} AND status=1
+    </update>
+
+    <update id="deletePost">
+        UPDATE post SET status=2, update_time=NOW()
+        WHERE id=#{id} AND user_id=#{userId} AND status=1
+    </update>
+
+    <select id="selectById" parameterType="long" resultType="org.example.hd.entity.Post">
+        SELECT * FROM post WHERE id=#{id} AND status=1
+    </select>
+
+    <select id="selectByUserId" parameterType="long" resultType="org.example.hd.entity.Post">
+        SELECT * FROM post WHERE user_id=#{userId} AND status=1 ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAllPosts" resultType="org.example.hd.entity.Post">
+        SELECT * FROM post WHERE status=1 ORDER BY create_time DESC
+    </select>
+</mapper>

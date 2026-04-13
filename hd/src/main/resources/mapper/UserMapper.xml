@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.hd.mapper.UserMapper">
+
+    <!-- 根据用户ID查询用户 -->
+    <select id="selectById" parameterType="long" resultType="org.example.hd.entity.User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <!-- 【新增 <select> 标签】 -->
+    <select id="findByIds" resultType="org.example.hd.entity.User">
+        SELECT * FROM user WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" parameterType="string" resultType="org.example.hd.entity.User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <!-- 插入新用户 -->
+    <insert id="insertUser" parameterType="org.example.hd.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user(username, nickname, password, avatar, email, gender, bio, create_time, update_time)
+        VALUES(#{username}, #{nickname}, #{password}, #{avatar}, #{email}, #{gender}, #{bio}, NOW(), NOW())
+    </insert>
+
+    <!-- 更新用户信息 -->
+    <update id="updateUser" parameterType="org.example.hd.entity.User">
+        UPDATE user
+        SET nickname=#{nickname},
+            avatar=#{avatar},
+            email=#{email},
+            gender=#{gender},
+            bio=#{bio},
+            update_time=NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>
